@@ -1,0 +1,2 @@
+name = "proxy-worker"
+main = "src/index.js"

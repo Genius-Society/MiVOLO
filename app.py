@@ -89,46 +89,44 @@ def infer(photo: str):
     return status, result, child, female, male
 
 
-if __name__ == "__main__":
-    warnings.filterwarnings("ignore")
-    with gr.Blocks() as iface:
-        gr.Markdown(_L("# 性别年龄检测器"))
-        with gr.Tab(_L("上传模式")):
-            gr.Interface(
-                fn=infer,
-                inputs=gr.Image(label=_L("上传照片"), type="filepath"),
-                outputs=[
-                    gr.Textbox(label=_L("状态栏"), buttons=["copy"]),
-                    gr.Image(
-                        label=_L("检测结果"),
-                        type="numpy",
-                        buttons=["download", "fullscreen"],
-                    ),
-                    gr.Textbox(label=_L("存在儿童")),
-                    gr.Textbox(label=_L("存在女性")),
-                    gr.Textbox(label=_L("存在男性")),
-                ],
-                examples=get_jpg_files(f"{MODEL_DIR}/examples"),
-                flagging_mode="never",
-                cache_examples=False,
-            )
-
-        with gr.Tab(_L("在线模式")):
-            gr.Interface(
-                fn=infer,
-                inputs=gr.Textbox(label=_L("网络图片链接"), buttons=["copy"]),
-                outputs=[
-                    gr.Textbox(label=_L("状态栏"), buttons=["copy"]),
-                    gr.Image(
-                        label=_L("检测结果"),
-                        type="numpy",
-                        buttons=["download", "fullscreen"],
-                    ),
-                    gr.Textbox(label=_L("存在儿童")),
-                    gr.Textbox(label=_L("存在女性")),
-                    gr.Textbox(label=_L("存在男性")),
-                ],
-                flagging_mode="never",
-            )
-
-    iface.launch(css="#gradio-share-link-button-0 { display: none; }", ssr_mode=False)
+warnings.filterwarnings("ignore")
+gr.TabbedInterface(
+    interface_list=[
+        gr.Interface(
+            fn=infer,
+            inputs=gr.Image(label=_L("上传照片"), type="filepath"),
+            outputs=[
+                gr.Textbox(label=_L("状态栏"), buttons=["copy"]),
+                gr.Image(
+                    label=_L("检测结果"),
+                    type="numpy",
+                    buttons=["download", "fullscreen"],
+                ),
+                gr.Textbox(label=_L("存在儿童")),
+                gr.Textbox(label=_L("存在女性")),
+                gr.Textbox(label=_L("存在男性")),
+            ],
+            examples=get_jpg_files(f"{MODEL_DIR}/examples"),
+            flagging_mode="never",
+            cache_examples=False,
+        ),
+        gr.Interface(
+            fn=infer,
+            inputs=gr.Textbox(label=_L("网络图片链接"), buttons=["copy"]),
+            outputs=[
+                gr.Textbox(label=_L("状态栏"), buttons=["copy"]),
+                gr.Image(
+                    label=_L("检测结果"),
+                    type="numpy",
+                    buttons=["download", "fullscreen"],
+                ),
+                gr.Textbox(label=_L("存在儿童")),
+                gr.Textbox(label=_L("存在女性")),
+                gr.Textbox(label=_L("存在男性")),
+            ],
+            flagging_mode="never",
+        ),
+    ],
+    tab_names=[_L("上传模式"), _L("在线模式")],
+    title=_L("性别年龄检测器"),
+).launch(css="#gradio-share-link-button-0 { display: none; }", ssr_mode=False)

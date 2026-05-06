@@ -4,7 +4,6 @@ from tqdm import tqdm
 from urllib.parse import urlparse
 
 TMP_DIR = "./__pycache__"
-
 EN_US = os.getenv("LANG") != "zh_CN.UTF-8"
 
 
@@ -26,7 +25,7 @@ else:
 
 
 ZH2EN = {
-    "# 性别年龄检测器": "# Gender Age Detector",
+    "性别年龄检测器": "Gender Age Detector",
     "上传模式": "Uploading Mode",
     "上传照片": "Upload Photo",
     "检测结果": "Detection Result",

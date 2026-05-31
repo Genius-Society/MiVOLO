@@ -129,4 +129,8 @@ gr.TabbedInterface(
     ],
     tab_names=[_L("上传模式"), _L("在线模式")],
     title=_L("性别年龄检测器"),
-).launch(css="#gradio-share-link-button-0 { display: none; }", ssr_mode=False)
+).launch(
+    theme=gr.themes.Glass(),
+    css="#gradio-share-link-button-0 { display: none; }",
+    ssr_mode=False,
+)

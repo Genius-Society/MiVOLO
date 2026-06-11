@@ -25,10 +25,10 @@ jobs:
 
       # Step 2: 同步至 HuggingFace
       - name: Sync Files to HuggingFace
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-          GIT_NAME: ${{ secrets.GIT_NAME }}
-          GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
+        # env:
+        #   HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        #   GIT_NAME: ${{ secrets.GIT_NAME }}
+        #   GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
         run: |
           mv -f ./.github/restart.py ../
           # git clone https://oauth2:$HF_TOKEN@huggingface.co/spaces/Genius-Society/MiVOLO ../hf_repo

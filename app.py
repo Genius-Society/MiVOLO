@@ -7,7 +7,12 @@ import numpy as np
 import gradio as gr
 from dataclasses import dataclass
 from mivolo.predictor import Predictor
-from utils import is_url, download_file, get_jpg_files, _L, MODEL_DIR, TMP_DIR
+from utils import is_url, download_file, get_jpg_files, ZH2EN, MODEL_DIR, TMP_DIR
+
+I18N = gr.I18n(
+    zh={key: key for key in ZH2EN},
+    en=ZH2EN,
+)
 
 
 @dataclass
@@ -56,9 +61,11 @@ class ValidImgDetector:
         detected_objects, out_im = predictor.recognize(image)
         has_child, has_female, has_male = False, False, False
         if len(detected_objects.ages) > 0:
-            has_child = _L("是") if min(detected_objects.ages) < 18 else _L("否")
-            has_female = _L("是") if "female" in detected_objects.genders else _L("否")
-            has_male = _L("是") if "male" in detected_objects.genders else _L("否")
+            has_child = I18N("是") if min(detected_objects.ages) < 18 else I18N("否")
+            has_female = (
+                I18N("是") if "female" in detected_objects.genders else I18N("否")
+            )
+            has_male = I18N("是") if "male" in detected_objects.genders else I18N("否")
 
         return out_im[:, :, ::-1], has_child, has_female, has_male
 
@@ -94,17 +101,17 @@ gr.TabbedInterface(
     interface_list=[
         gr.Interface(
             fn=infer,
-            inputs=gr.Image(label=_L("上传照片"), type="filepath"),
+            inputs=gr.Image(label=I18N("上传照片"), type="filepath"),
             outputs=[
-                gr.Textbox(label=_L("状态栏"), buttons=["copy"]),
+                gr.Textbox(label=I18N("状态栏"), buttons=["copy"]),
                 gr.Image(
-                    label=_L("检测结果"),
+                    label=I18N("检测结果"),
                     type="numpy",
                     buttons=["download", "fullscreen"],
                 ),
-                gr.Textbox(label=_L("存在儿童")),
-                gr.Textbox(label=_L("存在女性")),
-                gr.Textbox(label=_L("存在男性")),
+                gr.Textbox(label=I18N("存在儿童")),
+                gr.Textbox(label=I18N("存在女性")),
+                gr.Textbox(label=I18N("存在男性")),
             ],
             examples=get_jpg_files(f"{MODEL_DIR}/examples"),
             flagging_mode="never",
@@ -112,25 +119,26 @@ gr.TabbedInterface(
         ),
         gr.Interface(
             fn=infer,
-            inputs=gr.Textbox(label=_L("网络图片链接"), buttons=["copy"]),
+            inputs=gr.Textbox(label=I18N("网络图片链接"), buttons=["copy"]),
             outputs=[
-                gr.Textbox(label=_L("状态栏"), buttons=["copy"]),
+                gr.Textbox(label=I18N("状态栏"), buttons=["copy"]),
                 gr.Image(
-                    label=_L("检测结果"),
+                    label=I18N("检测结果"),
                     type="numpy",
                     buttons=["download", "fullscreen"],
                 ),
-                gr.Textbox(label=_L("存在儿童")),
-                gr.Textbox(label=_L("存在女性")),
-                gr.Textbox(label=_L("存在男性")),
+                gr.Textbox(label=I18N("存在儿童")),
+                gr.Textbox(label=I18N("存在女性")),
+                gr.Textbox(label=I18N("存在男性")),
             ],
             flagging_mode="never",
         ),
     ],
-    tab_names=[_L("上传模式"), _L("在线模式")],
-    title=_L("性别年龄检测器"),
+    tab_names=[I18N("上传模式"), I18N("在线模式")],
+    title=I18N("性别年龄检测器"),
 ).launch(
     theme=gr.themes.Citrus(),
     css="#gradio-share-link-button-0 { display: none; }",
     ssr_mode=False,
+    i18n=I18N,
 )
